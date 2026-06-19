@@ -18,8 +18,6 @@ static func get_theme_textures(style: String) -> Dictionary:
 	t.floor       = tp.call("floor_grate")
 	t.ceiling     = tp.call("ceiling_panel")
 	t.prop        = tp.call("crate_wood")
-	t.normal_wall = tp.call("wall_concrete_dark_normal")
-	t.height_wall = tp.call("wall_concrete_dark_height")
 	for key in t.keys():
 		if t[key] != "" and not FileAccess.file_exists(t[key]):
 			t[key] = "res://assets/textures/wall_concrete.png"

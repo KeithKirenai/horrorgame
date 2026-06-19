@@ -21,9 +21,6 @@ var game_over_menu_btn: Button
 # Objective UI
 var objective_label: Label
 
-# Post Process Ref
-var vhs_material_ref: ShaderMaterial # Bad Stream Shader
-
 # Debug UI
 var debug_control: Control
 var debug_labels = {}
@@ -31,7 +28,6 @@ var debug_log: RichTextLabel
 
 # Custom HUD elements
 var stamina_heart: Label
-var start_desc_label: Label
 var pause_resume_btn: Button
 var options_first_btn: Button
 var btn_opt_texture_style: Button
@@ -1157,8 +1153,6 @@ func _input(event):
 					_on_back_pressed()
 				else:
 					toggle_pause()
-		# Map system input logic removed
-
 
 
 func setup_pause_menu():
@@ -1723,8 +1717,6 @@ func _on_option_hovered(description: String, effect: String):
 	
 	if desc_label:
 		desc_label.text = clean_desc
-	if start_desc_label:
-		start_desc_label.text = clean_desc
 	
 	if impact_label:
 		if cost_val != "":
@@ -2044,11 +2036,11 @@ func _get_input_prompts() -> String:
 	var gp_connected = Input.get_connected_joypads().size() > 0
 	if gp_connected and is_gamepad_active:
 		if is_playstation_controller():
-			return "[L-STICK]/[D-PAD]: Navigate | [L-STICK]: Move | [R-STICK]: Look | [TRIANGLE]: Light | [CROSS]: Action/Select | [SHARE]: Radar"
+			return "[L-STICK]/[D-PAD]: Navigate | [L-STICK]: Move | [R-STICK]: Look | [TRIANGLE]: Light | [CROSS]: Action/Select"
 		else:
-			return "[L-STICK]/[D-PAD]: Navigate | [L-STICK]: Move | [R-STICK]: Look | [Y]: Light | [A]: Action/Select | [BACK]: Radar"
+			return "[L-STICK]/[D-PAD]: Navigate | [L-STICK]: Move | [R-STICK]: Look | [Y]: Light | [A]: Action/Select"
 	else:
-		return "[ARROW KEYS]: Navigate | [WASD]: Move | [MOUSE]: Look | [F]: Light | [E]: Action | [TAB]: Radar | [ENTER]: Select"
+		return "[ARROW KEYS]: Navigate | [WASD]: Move | [MOUSE]: Look | [F]: Light | [E]: Action | [ENTER]: Select"
 
 func _update_menu_prompts():
 	var gp_connected = Input.get_connected_joypads().size() > 0

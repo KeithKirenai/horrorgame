@@ -197,7 +197,7 @@ func _play_crank_sound():
 func _find_nearby_lights():
 	var parent = get_parent()
 	if not parent: return
-	var nav = parent.get_node_or_null("NavRegion")
+	var nav = parent.get_node_or_null("NavigationRegion3D")
 	if not nav: return
 	for child in nav.get_children():
 		_collect_lights_recursive(child, global_position)

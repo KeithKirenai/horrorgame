@@ -22,7 +22,6 @@ func _ready():
 	_ui = UIManager.new()
 	_ui.name = "UIManager"
 	add_child(_ui)
-	_ui.vhs_material_ref = vhs_material
 	GameStateManager.ui_manager = _ui
 	_ui.log_debug("Game Starting...")
 
@@ -261,7 +260,6 @@ func setup_environment():
 	env.fog_enabled = true
 	env.fog_light_color = Color(0.02, 0.02, 0.03)
 	env.fog_density = 0.012
-	env.fog_height_density = 1.0
 	env.fog_height = 0.0
 	env.fog_aerial_perspective = 0.0
 
