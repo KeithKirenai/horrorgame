@@ -1780,9 +1780,12 @@ func show_loading(text: String = "PLEASE STAND BY..."):
 	loading_screen.modulate.a = 1.0
 	loading_screen.visible = true
 
-func hide_loading():
+func hide_loading(instant := false):
 	if not loading_screen or not loading_screen.visible: return
-	# Smooth fade-out
+	if instant:
+		loading_screen.modulate.a = 0.0
+		loading_screen.visible = false
+		return
 	var tween = get_tree().create_tween()
 	tween.tween_property(loading_screen, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(func(): loading_screen.visible = false)

@@ -188,8 +188,8 @@ func win_game():
 	await get_tree().create_timer(1.8).timeout
 	level_gen.cleanup_level()
 	GameStateManager.reset()
+	ui.hide_loading(true)
 	get_tree().paused = true
-	ui.hide_loading()
 	ui.show_victory()
 
 func game_over():
