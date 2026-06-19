@@ -27,15 +27,6 @@ func _load_step_sounds():
 
 func set_theme():
 	_load_step_sounds()
-	var amb_path = "res://sfx/ambience_industrial.mp3"
-	if not FileAccess.file_exists(amb_path):
-		amb_path = "res://sfx/placeholder_ambience.mp3"
-	if FileAccess.file_exists(amb_path):
-		var new_stream = load(amb_path)
-		ambient_player.stream = new_stream
-		ambient_player.play()
-	else:
-		print("AudioManager: No ambience found for industrial theme")
 
 func _setup_footsteps_audio_bus():
 	var bus_name = "Footsteps"

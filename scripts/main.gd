@@ -146,8 +146,6 @@ func _on_generator_activated():
 func _on_generator_deactivated():
 	var ui = _ui
 	ui.update_objective(GameStateManager.generators_activated, GameStateManager.TOTAL_GENERATORS, GameStateManager.pages_collected, GameStateManager.TOTAL_PAGES)
-	_play_sfx("res://sfx/placeholder_scare.mp3", -8.0)
-
 	if GameStateManager.generators_activated >= GameStateManager.TOTAL_GENERATORS:
 		check_exit_unlock()
 

@@ -123,11 +123,6 @@ func interact_hold(delta):
 	held_this_frame = true
 	progress = min(progress + delta / RESTART_TIME, 1.0)
 	
-	# Alert the enemy to the cranking noise
-	var enemy = get_tree().get_first_node_in_group("enemy")
-	if enemy and enemy.has_method("hear_noise"):
-		enemy.hear_noise(global_position, 0.15)
-	
 	if progress >= 1.0:
 		EventBus.log_debug("Generator fully cranked, activating at: %s" % global_position)
 		activate_generator()

@@ -1484,19 +1484,6 @@ void fragment() {
 
 	var access_hbox = HBoxContainer.new()
 	access_hbox.alignment = HBoxContainer.ALIGNMENT_CENTER
-	var rim_lbl = Label.new()
-	rim_lbl.text = "ENEMY RIM GLOW: "
-	rim_lbl.add_theme_font_size_override("font_size", 8)
-	access_hbox.add_child(rim_lbl)
-
-	var btn_rim = create_premium_button("TOGGLE GLOW", func():
-		var enemy = get_tree().get_first_node_in_group("enemy")
-		if enemy and enemy.has_method("toggle_rim_glow"):
-			enemy.toggle_rim_glow()
-	, "Toggle a white rim glow around the stalker to make them highly visible in pitch darkness.", "rim_glow")
-	btn_rim.custom_minimum_size = Vector2(120, 24)
-	btn_rim.add_theme_font_size_override("font_size", 9)
-	access_hbox.add_child(btn_rim)
 	settings_col.add_child(access_hbox)
 		
 	var space = Control.new()

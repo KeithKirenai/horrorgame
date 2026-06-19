@@ -1,113 +1,72 @@
-# RUST HILL - Developer & Player Manual
+# Echo Index — Developer & Player Manual
 
-## PART 1: PLAYER MANUAL
+## Part 1: Player Manual
 
-### **Overview**
-**RUST HILL** is a psychological horror game designed to evoke the tension of early 90s found-footage and PS1 survival horror. You are trapped in a labyrinthine, abandoned archive known as "Rust Hill." Your goal is simple: Find the evidence, and find the way out.
+### Overview
+You are trapped in a procedurally generated industrial maze. Collect 5 glowing pages to unlock the exit. Restart 3 generators to restore lighting. Avoid the entity that stalks the halls.
 
-But you are not alone.
+### Controls
+- **WASD**: Move
+- **Mouse**: Look
+- **E**: Interact / Grab Page / Crank Generator (hold)
+- **F**: Toggle Flashlight
+- **ESC**: Pause Menu
+- **Click**: Capture mouse
 
-### **Objectives**
-1.  **Collect Pages:** Scoured throughout the maze are **5 Glowing Pages**. You must find all of them to unlock the exit.
-2.  **Escape:** Once all pages are collected, locate the **Exit Door** (marked by a Red light that turns Green) to survive.
-3.  **Survive:** Avoid "The Static Shift," an anomaly that stalks the halls.
+### Objectives
+1. Restart all 3 generators to light the maze
+2. Collect all 5 pages to unlock the exit
+3. Reach the exit door to escape
 
-### **Controls**
-*   **WASD:** Move
-*   **Mouse:** Look
-*   **Left Click:** Interact / Grab Page
-*   **Right Click (Hold):** Zoom (Mechanical Camera Zoom)
-*   **F:** Toggle Flashlight
-*   **TAB:** Toggle Minimap
-*   **ESC:** Pause Menu (Options, Resume, Quit)
-
-### **Survival Mechanics**
-*   **The Handcam:** Your view is through a heavy, handheld camcorder. It has weight, sway, and glitchy autofocus.
-*   **The Flashlight:**
-    *   Battery life is limited.
-    *   **Visual Cue:** The light will flicker intensely when battery is critical (< 20%).
-    *   **Recharge:** Turn off the flashlight to slowly recharge the battery.
-*   **The Map:**
-    *   Press **TAB** to see a grid map of the areas you have explored.
-    *   **Fog of War:** You only see walls and paths you have physically visited.
-    *   **Markers:**
-        *   **Green:** You
-        *   **Magenta:** The Entity (It is always tracked... use this to survive).
-        *   **Yellow:** Pages (Once discovered).
-        *   **Red:** Locked Exit / **Green:** Unlocked Exit.
-*   **The Entity ("The Static Shift"):**
-    *   It does not simply chase you. It stalks.
-    *   **Shadowing:** It prefers to watch from a distance.
-    *   **Bluffing:** It may charge at you screaming, only to vanish at the last second. Do not panic.
-    *   **Commitment:** If you are cornered, it will stop playing games.
-    *   **Detection:** Your camera will suffer chromatic aberration and shake when it is near. Use your Zoom and Map to keep tabs on it.
+### Survival
+- Flashlight is your only light source in unpowered areas
+- Restarting generators lights nearby ceiling lamps
+- The entity stalks via FSM: shadows from a distance, bluff charges, commits when you're cornered
+- Sprint (hold Shift) drains stamina but outruns the entity
 
 ---
 
-## PART 2: DEVELOPER MANUAL
+## Part 2: Developer Manual
 
-### **Technical Overview**
-*   **Engine:** Godot 4.x
-*   **Language:** GDScript
-*   **Render Pipeline:** Compatibility (OpenGL) / Forward+ (Vulkan) target.
-*   **Aesthetics:** PS1 styling via vertex jitter shaders, affine texture mapping emulation, and heavy post-processing (VHS, Dithering, Color Depth reduction).
+### Technical Overview
+- **Engine**: Godot 4.x
+- **Language**: GDScript
+- **Render**: Forward+ / Mobile, unshaded materials
+- **Aesthetics**: Low-poly geometry, nearest-neighbor filtering, dark ambient lighting
 
-### **Core Systems & Algorithms**
+### Core Systems
 
-#### **1. Level Generation (`level_generator.gd`)**
-*   **Algorithm:** **Recursive Division**.
-    *   The map is a 12x12 grid.
-    *   The algorithm recursively splits the space horizontally and vertically to create a nested structure of rooms and corridors, simulating an archive or basement.
-*   **Braiding:**
-    *   Post-generation, the script identifies "Dead Ends" (cells with 3 walls) and removes a random wall in ~20% of them. This creates loops, preventing the player from getting frustratingly cornered and allowing for "juking" gameplay.
-*   **Navigation:**
-    *   Uses `NavigationRegion3D` and `NavigationMesh`.
-    *   **Critical:** The NavMesh is baked **asynchronously** at runtime using `PARSED_GEOMETRY_STATIC_COLLIDERS`. The game waits for the `bake_finished` signal before spawning AI to ensure valid pathfinding.
+#### Level Generation (`level_generator.gd`)
+- Recursive division maze on an 8×8 to 12×12 grid
+- Braiding removes ~20% of dead ends to prevent cornering
+- Navigation mesh baked asynchronously at runtime
+- Generators, pages, and exit placed at strategic locations
 
-#### **2. Enemy AI (`enemy_ai.gd`)**
-*   **Archetype:** "The Elastic Stalker" (FSM - Finite State Machine).
-*   **States:**
-    *   `SHADOWING`: Uses A* to pathfind to the player's general area but moves slowly (speed 3.0). Updates path infrequently to look "creepy."
-    *   `BLUFF`: Triggered randomly or by timer. Enemy sprints (speed 7.0) at the player. Upon getting within striking distance (3.0 units), it intentionally triggers a "Miss/Skid" animation and stops, entering a temporary cooldown.
-    *   `COMMIT`: Triggered if the player is cornered or after multiple bluffs. Relentless A* pursuit.
-    *   `SEARCH`: If Line of Sight (Raycast) is broken, the enemy goes to the `last_known_position` and waits.
-*   **Sensors:**
-    *   **Vision:** RayCast3D from enemy eyes to player center. Updates `last_known_position` only on successful hit.
-    *   **Audio Occlusion:** RayCast3D checks for walls between Enemy and Player. If blocked, a `LowPassFilter` on the "EnemyBus" is enabled (500Hz cutoff), muffling sounds.
+#### Enemy AI (`enemy_ai.gd`)
+- FSM: Shadowing → Bluff → Commit → Search
+- Vision via RayCast3D line-of-sight to player
+- Audio occlusion: LowPassFilter on enemy bus when walls block LoS
 
-#### **3. Player Controller (`player.gd`)**
-*   **Physics:** Standard `CharacterBody3D`. Movement is relative to the camera's Y-rotation (head).
-*   **Handcam Simulation:**
-    *   **Inertia:** The camera rotation `lerp`s towards the raw mouse input, creating a "drag" effect.
-    *   **Noise:** `FastNoiseLite` applies constant translational and rotational jitter (breathing/trembling).
-    *   **Trauma:** Events (enemy proximity, jumpscares) add `trauma` (0.0-1.0), which exponentially increases the shake intensity.
-    *   **Walk Cycle:** A Figure-8 bob pattern (`cos`/`-cos`) with Z-axis roll. Footstep audio is synced to the bob's lowest point (`cos > 0.9`).
-    *   **Collision:** A `ShapeCast3D` detects walls in front of the camera and smoothly retracts the camera (`z` offset) to prevent clipping.
+#### Player Controller (`player.gd`)
+- CharacterBody3D with camera-relative movement
+- Handcam simulation: inertia, FastNoiseLite jitter, trauma system
+- Head bob synced to footstep audio
+- Flashlight with flicker effect
 
-#### **4. UI & Systems (`ui_manager.gd`, `main.gd`)**
-*   **Minimap:**
-    *   A 12x12 grid of `ColorRect`s.
-    *   **Fog of War:** Cells start Black. When the player enters a grid coordinate, it turns Grey.
-    *   **Wall Rendering:** Each cell has 4 child ColorRects representing walls (N/S/E/W), toggled based on level data.
-    *   **Enemy Tracking:** The enemy position is calculated from World Space -> Grid Space and drawn as Magenta on top of everything.
-*   **Post-Processing:**
-    *   **VHS Shader:** `shaders/vhs_glitch.gdshader`. Handles screen tearing and noise.
-    *   **PSX Shader:** `shaders/psx_post.gdshader`. Handles color depth reduction, dithering, and resolution scaling.
-    *   **Dynamic Aberration:** The Enemy AI drives the `aberration_amount` uniform on the PSX shader based on proximity.
+#### Generator System (`generator.gd`)
+- Hold E to crank, progress decays when released
+- Each generator scans nearby OmniLight3D nodes and toggles them on activate
+- Green indicator when online, blinking yellow while cranking, red when off
 
-### **Key File Structure**
-*   `scripts/`
-    *   `level_generator.gd`: map gen + nav baking.
-    *   `enemy_ai.gd`: FSM logic + audio + visuals animation.
-    *   `player.gd`: movement + handcam physics + interaction.
-    *   `ui_manager.gd`: map drawing + HUD + menus.
-    *   `main.gd`: game loop + global state (pages collected).
-*   `shaders/`
-    *   `enemy_skin.gdshader`: Vertex jitter + scrolling noise texture.
-    *   `psx_post.gdshader`: Fullscreen retro effects.
+### Key File Structure
+- `scripts/level_generator.gd` — maze generation + geometry
+- `scripts/enemy_ai.gd` — enemy FSM
+- `scripts/player.gd` — movement + interaction
+- `scripts/generator.gd` — generator logic + light control
+- `scripts/ui_manager.gd` — HUD + menus + minimap
+- `scripts/main.gd` — game loop + state management
+- `scripts/utils/material_factory.gd` — unshaded material creation
+- `scripts/utils/theme_manager.gd` — texture path management (industrial only)
 
-### **Debug Tools**
-*   **F3:** Toggle Debug Overlay (FPS, State, Position, Logs).
-*   **Key 1:** Toggle Fullbright (Lighting).
-*   **Key 2:** Toggle Enemy X-Ray (See through walls).
-*   **Key 3:** Toggle Constant VHS Glitch.
+### Debug Tools
+- **F3**: Toggle Debug Overlay
