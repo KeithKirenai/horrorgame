@@ -1,0 +1,188 @@
+{
+    "tempo_bpm": 48.0,
+    "duration_seconds": 30.0,
+    "tracks": {
+        "drone_bass": [
+            {
+                "time": 0.0,
+                "pitch": 28,
+                "duration": 12.0,
+                "vel": 80
+            },
+            {
+                "time": 0.0,
+                "pitch": 34,
+                "duration": 12.0,
+                "vel": 70
+            },
+            {
+                "time": 12.0,
+                "pitch": 29,
+                "duration": 12.0,
+                "vel": 80
+            },
+            {
+                "time": 12.0,
+                "pitch": 35,
+                "duration": 12.0,
+                "vel": 70
+            }
+        ],
+        "creepy_bells": [
+            {
+                "time": 1.2000000000000002,
+                "pitch": 88,
+                "duration": 2.8000000000000003,
+                "vel": 112
+            },
+            {
+                "time": 2.8000000000000003,
+                "pitch": 89,
+                "duration": 2.8000000000000003,
+                "vel": 102
+            },
+            {
+                "time": 4.4,
+                "pitch": 88,
+                "duration": 2.8000000000000003,
+                "vel": 96
+            },
+            {
+                "time": 6.0,
+                "pitch": 83,
+                "duration": 2.8000000000000003,
+                "vel": 89
+            },
+            {
+                "time": 7.6000000000000005,
+                "pitch": 84,
+                "duration": 2.8000000000000003,
+                "vel": 89
+            },
+            {
+                "time": 9.600000000000001,
+                "pitch": 80,
+                "duration": 2.8000000000000003,
+                "vel": 96
+            },
+            {
+                "time": 11.200000000000001,
+                "pitch": 81,
+                "duration": 2.8000000000000003,
+                "vel": 96
+            },
+            {
+                "time": 13.200000000000001,
+                "pitch": 76,
+                "duration": 2.8000000000000003,
+                "vel": 89
+            },
+            {
+                "time": 15.200000000000001,
+                "pitch": 75,
+                "duration": 2.8000000000000003,
+                "vel": 112
+            },
+            {
+                "time": 17.6,
+                "pitch": 88,
+                "duration": 2.8000000000000003,
+                "vel": 121
+            },
+            {
+                "time": 19.6,
+                "pitch": 94,
+                "duration": 2.8000000000000003,
+                "vel": 128
+            }
+        ],
+        "tension_swells": [
+            {
+                "time": 4.0,
+                "pitch": 52,
+                "duration": 7.2,
+                "vel": 60
+            },
+            {
+                "time": 4.0,
+                "pitch": 55,
+                "duration": 7.2,
+                "vel": 60
+            },
+            {
+                "time": 4.0,
+                "pitch": 59,
+                "duration": 7.2,
+                "vel": 60
+            },
+            {
+                "time": 13.600000000000001,
+                "pitch": 53,
+                "duration": 7.2,
+                "vel": 60
+            },
+            {
+                "time": 13.600000000000001,
+                "pitch": 56,
+                "duration": 7.2,
+                "vel": 60
+            },
+            {
+                "time": 13.600000000000001,
+                "pitch": 60,
+                "duration": 7.2,
+                "vel": 60
+            }
+        ],
+        "heartbeat": [
+            {
+                "time": 0.16000000000000003,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 3.2,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 6.4,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 9.600000000000001,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 12.8,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 16.0,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 19.200000000000003,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            },
+            {
+                "time": 22.400000000000002,
+                "pitch": 35,
+                "duration": 0.4,
+                "vel": 90
+            }
+        ]
+    }
+}
